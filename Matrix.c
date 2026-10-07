@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 void generate_matrix(double **matrix, int n, int seed) {
     srand(seed);
@@ -22,6 +23,43 @@ void multiply_matrices(double **A, double **B, double **C, int n) {
         }
     }
 }
+
+
+
+// Validación previa
+void check_correctness(int n) {
+    double **A = malloc(n * sizeof(double *));
+    double **I = malloc(n * sizeof(double *));
+    double **C = malloc(n * sizeof(double *));
+    for (int i = 0; i < n; i++) {
+        A[i] = malloc(n * sizeof(double));
+        I[i] = malloc(n * sizeof(double));
+        C[i] = malloc(n * sizeof(double));
+        for (int j = 0; j < n; j++) {
+            I[i][j] = (i == j) ? 1.0 : 0.0;
+        }
+    }
+    
+    generate_matrix(A, n, 42);
+    multiply_matrices(A, I, C, n);
+    
+    double epsilon = 1e-9;
+    int passed = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (fabs(C[i][j] - A[i][j]) > epsilon) passed = 0;
+        }
+    }
+    
+    if (passed) printf("Validación exitosa en C: A * I = A\n");
+    else printf("Error de validación en C.\n");
+    
+    for (int i = 0; i < n; i++) { free(A[i]); free(I[i]); free(C[i]); }
+    free(A); free(I); free(C);
+}
+
+
+
 
 int main() {
     int n = 100; // Tamaño inicial de prueba

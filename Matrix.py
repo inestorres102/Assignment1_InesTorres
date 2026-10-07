@@ -18,6 +18,7 @@ def multiply_matrices(A, B, n):
     return C
 
 
+# Validación previa
 def check_correctness(n):
     # Crear matriz identidad
     I = [[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
@@ -37,7 +38,7 @@ def check_correctness(n):
     print("Validación exitosa en Python: A * I = A")
     return True
 
-
+# Ejecución de validación, previa a la ejecución ppal
 if __name__ == "__main__":
     check_correctness(10) # Prueba de correctness obligatoria
 
