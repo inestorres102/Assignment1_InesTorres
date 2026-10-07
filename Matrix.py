@@ -17,6 +17,31 @@ def multiply_matrices(A, B, n):
                 C[i][j] += A[i][k] * B[k][j]
     return C
 
+
+def check_correctness(n):
+    # Crear matriz identidad
+    I = [[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
+    # Matriz aleatoria A
+    A = generate_matrix(n, 42)
+    
+    # Multiplicar A * I
+    C = multiply_matrices(A, I, n)
+    
+    # Validar con tolerancia (1e-9)
+    epsilon = 1e-9
+    for i in range(n):
+        for j in range(n):
+            if abs(C[i][j] - A[i][j]) > epsilon:
+                print("Error de validación en Python.")
+                return False
+    print("Validación exitosa en Python: A * I = A")
+    return True
+
+
+if __name__ == "__main__":
+    check_correctness(10) # Prueba de correctness obligatoria
+
+
 if __name__ == "__main__":
     n = 100  # Tamaño inicial de prueba
     A = generate_matrix(n, 42)
