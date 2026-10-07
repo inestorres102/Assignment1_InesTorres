@@ -1,0 +1,19 @@
+# Java
+*.class
+*.jar
+**/target/
+
+# C
+*.o
+*.out
+*.exe
+perf.data*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Entorno
+.vscode/
