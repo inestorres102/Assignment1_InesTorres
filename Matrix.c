@@ -51,8 +51,8 @@ void check_correctness(int n) {
         }
     }
     
-    if (passed) printf("Validación exitosa en C: A * I = A\n");
-    else printf("Error de validación en C.\n");
+    if (passed) printf("Successful validation in C: A * I = A\n");
+    else printf("Validation error in C.\n");
     
     for (int i = 0; i < n; i++) { free(A[i]); free(I[i]); free(C[i]); }
     free(A); free(I); free(C);
@@ -87,7 +87,7 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &end);
     double time_taken = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
 
-    printf("C: Matriz %dx%d calculada en %.5f segundos\n", n, n, time_taken);
+    printf("C: %dx%d matrix calculated in %.5f seconds\n", n, n, time_taken);
 
     // Liberar memoria
     for (int i = 0; i < n; i++) {

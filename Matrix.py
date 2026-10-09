@@ -2,12 +2,12 @@ import time
 import random
 
 def generate_matrix(n, seed):
-    """Genera una matriz n x n con valores aleatorios."""
+    """n x n matrix -> random values"""
     random.seed(seed)
     return [[random.random() for _ in range(n)] for _ in range(n)]
 
 def multiply_matrices(A, B, n):
-    """Triple bucle clásico O(n^3) para multiplicar matrices."""
+    """Triple bucle O(n^3) para multiplicar matrices."""
     # Inicializar matriz C con ceros
     C = [[0.0] * n for _ in range(n)]
     
@@ -33,9 +33,9 @@ def check_correctness(n):
     for i in range(n):
         for j in range(n):
             if abs(C[i][j] - A[i][j]) > epsilon:
-                print("Error de validación en Python.")
+                print("Validation error in Python")
                 return False
-    print("Validación exitosa en Python: A * I = A")
+    print("Successful validation in Python: A * I = A")
     return True
 
 # Ejecución de validación, previa a la ejecución ppal
@@ -53,4 +53,4 @@ if __name__ == "__main__":
     C = multiply_matrices(A, B, n)
     end_time = time.time()
 
-    print(f"Python: Matriz {n}x{n} calculada en {end_time - start_time:.5f} segundos")
+    print(f"Python: {n}x{n} matrix calculated in {end_time - start_time:.5f} seconds")
