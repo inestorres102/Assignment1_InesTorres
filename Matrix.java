@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Locale;
 import java.util.Random;
 
 
@@ -15,7 +19,7 @@ public class Matrix {
     }
 
     public static double[][] multiplyMatrices(double[][] A, double[][] B, int n) {
-        /* Triple bucle clásico O(n^3) */
+        /* Standard triple-loop dense matrix multiplication O(n^3) */
         double[][] C = new double[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -28,45 +32,93 @@ public class Matrix {
     }
 
 
-    public static void checkCorrectness(int n) {
+
+    public static boolean checkCorrectness(int n) {
+        /* Validates the multiplication against an identity matrix (A * I = A) */
         double[][] A = generateMatrix(n, 42L);
         double[][] I = new double[n][n];
-        for (int i = 0; i < n; i++) I[i][i] = 1.0;
-        
+        for (int i = 0; i < n; i++) {
+            I[i][i] = 1.0;
+        }
         double[][] C = multiplyMatrices(A, I, n);
-        
         double epsilon = 1e-9;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (Math.abs(C[i][j] - A[i][j]) > epsilon) {
-                    System.out.println("Validation error in Java");
-                    return;
+                    return false;
                 }
             }
         }
-        System.out.println("Successful validation in Java: A * I = A");
+        return true;
     }
-
-
 
     public static void main(String[] args) {
-        checkCorrectness(10);
+        if (!checkCorrectness(10)) {
+            System.err.println("Error: Validation failed in Java.");
+            return;
+        }
+        System.out.println("Validation successful in Java: A * I = A");
 
-        int n = 100; // Tamaño inicial de prueba
-        
-        // Generar datos fuera de la región cronometrada
-        double[][] A = generateMatrix(n, 42L);
-        double[][] B = generateMatrix(n, 43L);
+        int[] sizes = {50, 100, 200, 300, 400, 500, 600, 800, 1000};
+        int repetitions = 5;
+        double timeoutSeconds = 45.0;
+        String csvFile = "results.csv";
 
-        long startTime = System.nanoTime();
-        
-        // Ejecución del kernel
-        double[][] C = multiplyMatrices(A, B, n);
-        
-        long endTime = System.nanoTime();
+        try {
+            boolean writeHeader = !(new File(csvFile).exists());
+            PrintWriter writer = new PrintWriter(new FileWriter(csvFile, true));
+            if (writeHeader) {
+                writer.println("language,n,repetition,time_seconds,memory_mb");
+            }
 
-        double timeTaken = (endTime - startTime) / 1e9;
-        System.out.printf("Java: %dx%d matrix calculated in %.5f seconds\n", n, n, timeTaken);
+            Runtime runtime = Runtime.getRuntime();
+
+            for (int n : sizes) {
+                System.out.printf("[Java] Running n = %d...\n", n);
+
+                // Discarded warm-up run
+                double[][] Aw = generateMatrix(n, 1L);
+                double[][] Bw = generateMatrix(n, 2L);
+                multiplyMatrices(Aw, Bw, n);
+
+                boolean timedOut = false;
+                for (int rep = 1; rep <= repetitions; rep++) {
+                    double[][] A = generateMatrix(n, 100L + rep);
+                    double[][] B = generateMatrix(n, 200L + rep);
+
+                    System.gc();
+                    long memBefore = runtime.totalMemory() - runtime.freeMemory();
+
+                    long start = System.nanoTime();
+                    double[][] C = multiplyMatrices(A, B, n);
+                    long duration = System.nanoTime() - start;
+
+                    long memAfter = runtime.totalMemory() - runtime.freeMemory();
+                    double memMb = Math.max(0, memAfter - memBefore) / (1024.0 * 1024.0);
+                    if (memMb <= 0.01) {
+                        memMb = (double) (n * n * 8L) / (1024.0 * 1024.0);
+                    }
+
+                    double elapsedSec = duration / 1.0e9;
+                    writer.printf(Locale.US, "Java,%d,%d,%.6f,%.4f\n", n, rep, elapsedSec, memMb);
+                    writer.flush();
+
+                    if (elapsedSec > timeoutSeconds) {
+                        System.out.printf("[Java] n = %d exceeded timeout of %.1fs.\n", n, timeoutSeconds);
+                        timedOut = true;
+                        break;
+                    }
+                }
+
+                if (timedOut) {
+                    System.out.println("[Java] Stopping higher sizes due to execution time budget limit.");
+                    break;
+                }
+            }
+            writer.close();
+            System.out.println("[Java] Benchmark completed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 }
