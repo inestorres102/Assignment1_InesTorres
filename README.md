@@ -88,6 +88,9 @@ Assignment1/
 ├── Matrix.py           # Python naive implementation and benchmark harness
 ├── Matrix.java         # Java naive implementation and benchmark harness
 ├── Matrix.c            # C naive implementation and benchmark harness
-└── results.csv         # Raw experimental measurements across all languages
+├── plot_results.py             # Analysis script generating statistics and visual plots
+├── results.csv                 # Raw benchmark measurements across all languages
+├── summary_statistics.csv      # Computed statistics (median, IQR) for time and memory
+├── time_comparison_loglog.png  # Scaling comparison plot (execution time vs. dimension n)
+└── memory_comparison.png       # Memory footprint comparison plot
 ```
-
