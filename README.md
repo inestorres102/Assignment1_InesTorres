@@ -7,9 +7,9 @@ Empirical benchmark comparing naive dense matrix multiplication algorithms acros
 - **RAM:** 16.0 GB DDR4
 - **Operating System:** Windows 11
 - **Compilers and Runtime Versions:**
-  - Python: 3.14.0
-  - Java: OpenJDK
-  - C: GCC (MinGW)
+  - Python: CPython 3.13.14
+  - Java: Java 21 LTS (Oracle HotSpot 64-Bit Server VM, build 21.0.12.1)
+  - C: GCC 16.2.0 (MinGW-w64)
 
 ## 2. Experimental Protocol
 - **Algorithm:** Naive dense matrix multiplication with $O(n^3)$ arithmetic operations.
