@@ -3,8 +3,8 @@
 Empirical benchmark comparing naive dense matrix multiplication algorithms across Python, Java, and C under controlled experimental conditions.
 
 ## 1. System and Hardware Environment
-- **CPU:** Intel Core I7
-- **RAM:** Total system memory (16 GB)
+- **CPU:** 12th Gen Intel(R) Core(TM) i7 - 12650H
+- **RAM:** 16.0 GB DDR4
 - **Operating System:** Windows 11
 - **Compilers and Runtime Versions:**
   - Python: 3.14.0
